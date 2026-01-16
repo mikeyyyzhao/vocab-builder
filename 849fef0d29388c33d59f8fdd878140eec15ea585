@@ -1,0 +1,25 @@
+vocab-builder/vocab-builder/ContentView.swift
+  4a217d7903a9f699 11-14,16-18,39,42,45-60
+vocab-builder/vocab-builder/VocabularyData.swift
+  4a217d7903a9f699 18-95,97-382
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "849fef0d29388c33d59f8fdd878140eec15ea585",
+  "prompts": {
+    "4a217d7903a9f699": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "486f8623-ba96-439a-8942-909a4017bc56",
+        "model": "claude-opus-4-5-20251101"
+      },
+      "human_author": "Michael Zhao <mchlzhao@gmail.com>",
+      "messages": [],
+      "total_additions": 390,
+      "total_deletions": 367,
+      "accepted_lines": 390,
+      "overriden_lines": 0
+    }
+  }
+}
