@@ -126,6 +126,52 @@ struct LargeWidgetView: View {
     }
 }
 
+// MARK: - Lock Screen Widgets
+
+struct AccessoryCircularView: View {
+    var entry: VocabEntry
+
+    var body: some View {
+        ZStack {
+            AccessoryWidgetBackground()
+            VStack(spacing: 2) {
+                Image(systemName: "book.fill")
+                    .font(.caption)
+                Text(entry.word.word.prefix(4))
+                    .font(.caption2)
+                    .fontWeight(.bold)
+            }
+        }
+    }
+}
+
+struct AccessoryRectangularView: View {
+    var entry: VocabEntry
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack {
+                Image(systemName: "book.fill")
+                    .font(.caption)
+                Text(entry.word.word)
+                    .font(.headline)
+                    .fontWeight(.bold)
+            }
+            Text(entry.word.definition)
+                .font(.caption)
+                .lineLimit(2)
+        }
+    }
+}
+
+struct AccessoryInlineView: View {
+    var entry: VocabEntry
+
+    var body: some View {
+        Text("\(entry.word.word): \(entry.word.definition)")
+    }
+}
+
 struct VocabWidgetEntryView: View {
     var entry: VocabEntry
     @Environment(\.widgetFamily) var family
@@ -138,6 +184,12 @@ struct VocabWidgetEntryView: View {
             MediumWidgetView(entry: entry)
         case .systemLarge:
             LargeWidgetView(entry: entry)
+        case .accessoryCircular:
+            AccessoryCircularView(entry: entry)
+        case .accessoryRectangular:
+            AccessoryRectangularView(entry: entry)
+        case .accessoryInline:
+            AccessoryInlineView(entry: entry)
         default:
             SmallWidgetView(entry: entry)
         }
@@ -160,7 +212,14 @@ struct VocabWidget: Widget {
         }
         .configurationDisplayName("Vocab Builder")
         .description("Learn a new word every day.")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .supportedFamilies([
+            .systemSmall,
+            .systemMedium,
+            .systemLarge,
+            .accessoryCircular,
+            .accessoryRectangular,
+            .accessoryInline
+        ])
     }
 }
 
