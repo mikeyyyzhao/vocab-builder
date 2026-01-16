@@ -1,0 +1,1 @@
+I want to build a english vocab builder that shows up as a widget on my homescreen. Everyday, the widget should give me a new word and a short and succint definition underneath. It should update everyday without me having to open the app.
