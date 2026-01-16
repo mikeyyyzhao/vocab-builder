@@ -8,7 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    let todaysWord = VocabularyData.todaysWord()
+    @State private var currentIndex: Int = {
+        let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 1
+        return (dayOfYear - 1) % VocabularyData.words.count
+    }()
+
+    private var currentWord: VocabularyWord {
+        VocabularyData.words[currentIndex]
+    }
 
     var body: some View {
         NavigationView {
@@ -29,12 +36,28 @@ struct ContentView: View {
                                 .foregroundColor(.accentColor)
                         }
 
-                        Text(todaysWord.word)
+                        Text(currentWord.word)
                             .font(.system(size: 36, weight: .bold, design: .serif))
 
-                        Text(todaysWord.definition)
+                        Text(currentWord.definition)
                             .font(.title3)
                             .foregroundColor(.secondary)
+
+                        Button(action: {
+                            currentIndex = (currentIndex + 1) % VocabularyData.words.count
+                        }) {
+                            HStack {
+                                Text("Next Word")
+                                Image(systemName: "arrow.right")
+                            }
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.accentColor)
+                            .cornerRadius(12)
+                        }
+                        .padding(.top, 8)
                     }
                     .padding(24)
                     .background(Color(.systemGray6))
