@@ -8,153 +8,112 @@
 import WidgetKit
 import SwiftUI
 
-// MARK: - Timeline Entry
 struct VocabEntry: TimelineEntry {
     let date: Date
     let word: VocabularyWord
 }
 
-// MARK: - Timeline Provider
 struct VocabProvider: TimelineProvider {
     func placeholder(in context: Context) -> VocabEntry {
-        VocabEntry(date: Date(), word: VocabularyData.todaysWord())
+        VocabEntry(date: Date(), word: VocabularyData.words[0])
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (VocabEntry) -> Void) {
+    func getSnapshot(in context: Context, completion: @escaping (VocabEntry) -> ()) {
         let entry = VocabEntry(date: Date(), word: VocabularyData.todaysWord())
         completion(entry)
     }
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<VocabEntry>) -> Void) {
-        let currentDate = Date()
-        let todaysWord = VocabularyData.todaysWord()
+    func getTimeline(in context: Context, completion: @escaping (Timeline<VocabEntry>) -> ()) {
+        let currentWord = VocabularyData.todaysWord()
+        let entry = VocabEntry(date: Date(), word: currentWord)
 
-        // Create entry for today
-        let entry = VocabEntry(date: currentDate, word: todaysWord)
-
-        // Calculate next midnight to refresh the widget
-        let calendar = Calendar.current
-        let tomorrow = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: currentDate)!)
-
-        // Create timeline that refreshes at midnight
+        // Refresh at midnight tomorrow
+        let tomorrow = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: 1, to: Date())!)
         let timeline = Timeline(entries: [entry], policy: .after(tomorrow))
         completion(timeline)
     }
 }
 
-// MARK: - Widget Views
-struct VocabWidgetEntryView: View {
-    var entry: VocabProvider.Entry
-    @Environment(\.widgetFamily) var family
-
-    var body: some View {
-        switch family {
-        case .systemSmall:
-            SmallWidgetView(word: entry.word)
-        case .systemMedium:
-            MediumWidgetView(word: entry.word)
-        case .systemLarge:
-            LargeWidgetView(word: entry.word)
-        default:
-            SmallWidgetView(word: entry.word)
-        }
-    }
-}
-
 struct SmallWidgetView: View {
-    let word: VocabularyWord
+    var entry: VocabEntry
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Word of the Day")
-                .font(.caption2)
+                .font(.caption)
                 .foregroundColor(.secondary)
-                .textCase(.uppercase)
 
-            Text(word.word)
-                .font(.system(size: 20, weight: .bold, design: .serif))
+            Text(entry.word.word)
+                .font(.title2)
+                .fontWeight(.bold)
                 .foregroundColor(.primary)
-                .minimumScaleFactor(0.7)
-                .lineLimit(1)
 
-            Text(word.definition)
+            Text(entry.word.definition)
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .lineLimit(3)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Spacer()
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .containerBackground(.fill.tertiary, for: .widget)
     }
 }
 
 struct MediumWidgetView: View {
-    let word: VocabularyWord
+    var entry: VocabEntry
 
     var body: some View {
-        HStack(spacing: 16) {
+        HStack {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Word of the Day")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    .textCase(.uppercase)
 
-                Text(word.word)
-                    .font(.system(size: 28, weight: .bold, design: .serif))
+                Text(entry.word.word)
+                    .font(.title)
+                    .fontWeight(.bold)
                     .foregroundColor(.primary)
 
-                Text(word.definition)
+                Text(entry.word.definition)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .lineLimit(2)
-
-                Spacer()
             }
 
             Spacer()
 
-            VStack {
-                Image(systemName: "text.book.closed.fill")
-                    .font(.system(size: 40))
-                    .foregroundColor(.accentColor.opacity(0.7))
-            }
+            Image(systemName: "book.fill")
+                .font(.largeTitle)
+                .foregroundColor(.blue.opacity(0.3))
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .containerBackground(.fill.tertiary, for: .widget)
     }
 }
 
 struct LargeWidgetView: View {
-    let word: VocabularyWord
+    var entry: VocabEntry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("Word of the Day")
-                    .font(.caption)
+                    .font(.headline)
                     .foregroundColor(.secondary)
-                    .textCase(.uppercase)
-
                 Spacer()
-
-                Image(systemName: "text.book.closed.fill")
-                    .font(.title2)
-                    .foregroundColor(.accentColor.opacity(0.7))
+                Image(systemName: "book.fill")
+                    .foregroundColor(.blue.opacity(0.3))
             }
 
-            VStack(alignment: .leading, spacing: 12) {
-                Text(word.word)
-                    .font(.system(size: 36, weight: .bold, design: .serif))
-                    .foregroundColor(.primary)
+            Spacer()
 
-                Text(word.definition)
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-            }
+            Text(entry.word.word)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+
+            Text(entry.word.definition)
+                .font(.title3)
+                .foregroundColor(.secondary)
 
             Spacer()
 
@@ -164,17 +123,40 @@ struct LargeWidgetView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .containerBackground(.fill.tertiary, for: .widget)
     }
 }
 
-// MARK: - Widget Configuration
+struct VocabWidgetEntryView: View {
+    var entry: VocabEntry
+    @Environment(\.widgetFamily) var family
+
+    var body: some View {
+        switch family {
+        case .systemSmall:
+            SmallWidgetView(entry: entry)
+        case .systemMedium:
+            MediumWidgetView(entry: entry)
+        case .systemLarge:
+            LargeWidgetView(entry: entry)
+        default:
+            SmallWidgetView(entry: entry)
+        }
+    }
+}
+
 struct VocabWidget: Widget {
     let kind: String = "VocabWidget"
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: VocabProvider()) { entry in
-            VocabWidgetEntryView(entry: entry)
+            if #available(iOS 17.0, *) {
+                VocabWidgetEntryView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                VocabWidgetEntryView(entry: entry)
+                    .padding()
+                    .background()
+            }
         }
         .configurationDisplayName("Vocab Builder")
         .description("Learn a new word every day.")
@@ -182,29 +164,20 @@ struct VocabWidget: Widget {
     }
 }
 
-// MARK: - Widget Bundle (if you have multiple widgets)
-@main
-struct VocabWidgetBundle: WidgetBundle {
-    var body: some Widget {
-        VocabWidget()
-    }
-}
-
-// MARK: - Previews
 #Preview(as: .systemSmall) {
     VocabWidget()
 } timeline: {
-    VocabEntry(date: .now, word: VocabularyData.todaysWord())
+    VocabEntry(date: .now, word: VocabularyData.words[0])
 }
 
 #Preview(as: .systemMedium) {
     VocabWidget()
 } timeline: {
-    VocabEntry(date: .now, word: VocabularyData.todaysWord())
+    VocabEntry(date: .now, word: VocabularyData.words[0])
 }
 
 #Preview(as: .systemLarge) {
     VocabWidget()
 } timeline: {
-    VocabEntry(date: .now, word: VocabularyData.todaysWord())
+    VocabEntry(date: .now, word: VocabularyData.words[0])
 }
