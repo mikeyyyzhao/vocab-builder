@@ -1,0 +1,23 @@
+vocab-builder/VocabWidget/VocabWidget.swift
+  f3cb81d636dcbd87 18,21,26-28,30-31,38,43,46-48,51,62,65,71-73,76,84-86,94,97,100,103-104,107,109-116,130-131,134-142,170,176,182
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "46a13214adad3af338fd89ee1c1dbbe624129e3d",
+  "prompts": {
+    "f3cb81d636dcbd87": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5e0e3745-aad6-452a-9260-77fb86d86fcf",
+        "model": "claude-opus-4-5-20251101"
+      },
+      "human_author": "Michael Zhao <mchlzhao@gmail.com>",
+      "messages": [],
+      "total_additions": 134,
+      "total_deletions": 37,
+      "accepted_lines": 132,
+      "overriden_lines": 0
+    }
+  }
+}
