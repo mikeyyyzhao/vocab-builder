@@ -1,0 +1,27 @@
+vocab-builder/vocab-builder/VocabularyData.swift
+  d173967e845755fb 10-17,22-23,28-392
+vocab-builder/VocabWidget/VocabWidget.swift
+  d173967e845755fb 41,43,46,48,50-54,59,71,76,78,80-84,89-94,125,129-133,139-143,186-187
+vocab-builder/vocab-builder/ContentView.swift
+  d173967e845755fb 9,17-18,23-27,49-51,53-62,68-74,80-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "e36e03561e6bd90950f851d553c846aae4f6b087",
+  "prompts": {
+    "d173967e845755fb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dcbdfe78-4f07-4814-939e-49d51484ccde",
+        "model": "claude-opus-4-5-20251101"
+      },
+      "human_author": "Michael Zhao <mchlzhao@gmail.com>",
+      "messages": [],
+      "total_additions": 523,
+      "total_deletions": 429,
+      "accepted_lines": 473,
+      "overriden_lines": 0
+    }
+  }
+}
