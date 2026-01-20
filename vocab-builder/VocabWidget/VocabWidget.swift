@@ -38,20 +38,25 @@ struct SmallWidgetView: View {
     var entry: VocabEntry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             Text("Word of the Day")
-                .font(.caption)
+                .font(.caption2)
                 .foregroundColor(.secondary)
 
-            Text(entry.word.word)
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
+            HStack(spacing: 4) {
+                Text(entry.word.word)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+                Text("(\(entry.word.partOfSpeech.rawValue))")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
 
             Text(entry.word.definition)
                 .font(.caption)
                 .foregroundColor(.secondary)
-                .lineLimit(3)
+                .lineLimit(2)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -63,19 +68,30 @@ struct MediumWidgetView: View {
 
     var body: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("Word of the Day")
                     .font(.caption)
                     .foregroundColor(.secondary)
 
-                Text(entry.word.word)
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                HStack(spacing: 6) {
+                    Text(entry.word.word)
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                    Text("(\(entry.word.partOfSpeech.rawValue))")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
 
                 Text(entry.word.definition)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
+                    .lineLimit(1)
+
+                Text("\"\(entry.word.example)\"")
+                    .font(.caption)
+                    .foregroundColor(.secondary.opacity(0.8))
+                    .italic()
                     .lineLimit(2)
             }
 
@@ -106,14 +122,25 @@ struct LargeWidgetView: View {
 
             Spacer()
 
-            Text(entry.word.word)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text(entry.word.word)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+                Text("(\(entry.word.partOfSpeech.rawValue))")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
 
             Text(entry.word.definition)
                 .font(.title3)
                 .foregroundColor(.secondary)
+
+            Text("\"\(entry.word.example)\"")
+                .font(.subheadline)
+                .foregroundColor(.secondary.opacity(0.8))
+                .italic()
+                .lineLimit(3)
 
             Spacer()
 
@@ -156,6 +183,8 @@ struct AccessoryRectangularView: View {
                 Text(entry.word.word)
                     .font(.headline)
                     .fontWeight(.bold)
+                Text("(\(entry.word.partOfSpeech.rawValue))")
+                    .font(.caption2)
             }
             Text(entry.word.definition)
                 .font(.caption)

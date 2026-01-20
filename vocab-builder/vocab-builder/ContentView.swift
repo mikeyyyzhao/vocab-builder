@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct ContentView: View {
     @State private var currentIndex: Int = {
@@ -13,8 +14,17 @@ struct ContentView: View {
         return (dayOfYear - 1) % VocabularyData.words.count
     }()
 
+    private let synthesizer = AVSpeechSynthesizer()
+
     private var currentWord: VocabularyWord {
         VocabularyData.words[currentIndex]
+    }
+
+    private func pronounceWord() {
+        let utterance = AVSpeechUtterance(string: currentWord.word)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        utterance.rate = 0.4
+        synthesizer.speak(utterance)
     }
 
     var body: some View {
@@ -36,26 +46,46 @@ struct ContentView: View {
                                 .foregroundColor(.accentColor)
                         }
 
-                        Text(currentWord.word)
-                            .font(.system(size: 36, weight: .bold, design: .serif))
+                        HStack(alignment: .firstTextBaseline, spacing: 8) {
+                            Text(currentWord.word)
+                                .font(.system(size: 36, weight: .bold, design: .serif))
+
+                            Text("(\(currentWord.partOfSpeech.rawValue))")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+
+                            Button(action: pronounceWord) {
+                                Image(systemName: "speaker.wave.2.fill")
+                                    .font(.title2)
+                                    .foregroundColor(.accentColor)
+                            }
+                        }
 
                         Text(currentWord.definition)
                             .font(.title3)
                             .foregroundColor(.secondary)
 
-                        Button(action: {
-                            currentIndex = (currentIndex + 1) % VocabularyData.words.count
-                        }) {
-                            HStack {
-                                Text("Next Word")
-                                Image(systemName: "arrow.right")
+                        Text("\"\(currentWord.example)\"")
+                            .font(.body)
+                            .foregroundColor(.secondary.opacity(0.8))
+                            .italic()
+                            .padding(.top, 4)
+
+                        HStack(spacing: 12) {
+                            Button(action: {
+                                currentIndex = (currentIndex + 1) % VocabularyData.words.count
+                            }) {
+                                HStack {
+                                    Text("Next Word")
+                                    Image(systemName: "arrow.right")
+                                }
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.accentColor)
+                                .cornerRadius(12)
                             }
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.accentColor)
-                            .cornerRadius(12)
                         }
                         .padding(.top, 8)
                     }
